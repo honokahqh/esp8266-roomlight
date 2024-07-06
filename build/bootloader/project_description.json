@@ -1,0 +1,18 @@
+{
+    "project_name":       "bootloader",
+    "project_path":       "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/bootloader/subproject",
+    "build_dir":          "D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/bootloader",
+    "config_file":        "D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/sdkconfig",
+    "config_defaults":    "",
+    "app_elf":            "bootloader.elf",
+    "app_bin":            "bootloader.bin",
+    "git_revision":       "v3.4-82-gaab95f48",
+    "phy_data_partition": "",
+    "monitor_baud" : "74880",
+    "config_environment" : {
+        "COMPONENT_KCONFIGS" : "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/esp8266/Kconfig;D:/workspace/esp8266/ESP8266_RTOS_SDK/components/esp_common/Kconfig;D:/workspace/esp8266/ESP8266_RTOS_SDK/components/log/Kconfig;D:/workspace/esp8266/ESP8266_RTOS_SDK/components/spi_flash/Kconfig",
+        "COMPONENT_KCONFIGS_PROJBUILD" : "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/bootloader/Kconfig.projbuild;D:/workspace/esp8266/ESP8266_RTOS_SDK/components/esptool_py/Kconfig.projbuild;D:/workspace/esp8266/ESP8266_RTOS_SDK/components/partition_table/Kconfig.projbuild"
+    },
+    "build_components" : [ "bootloader", "bootloader_support", "esp8266", "esp_common", "esptool_py", "log", "main", "partition_table", "spi_flash", "" ],
+    "build_component_paths" : [ "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/bootloader", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/bootloader_support", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/esp8266", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/esp_common", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/esptool_py", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/log", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/bootloader/subproject/main", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/partition_table", "D:/workspace/esp8266/ESP8266_RTOS_SDK/components/spi_flash", "" ]
+}

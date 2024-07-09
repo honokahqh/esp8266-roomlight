@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-
+#include "cJSON.h"
 #define TAG "user nvs"
 
 static const char *NVS_CUSTOMER = "customer_data";
@@ -127,82 +127,40 @@ void nvs_read_data_from_flash() {
     nvs_close(handle);
 }
 
-void parse_data_packet(const char *data_packet, int data_packet_len,
-                       nvs_data_t *nvs_data) {
-    static const size_t offsets[] = {
-        offsetof(nvs_data_t, ssid),         offsetof(nvs_data_t, pass),
-        offsetof(nvs_data_t, userID),       offsetof(nvs_data_t, roomID),
-        offsetof(nvs_data_t, lightNormal),  offsetof(nvs_data_t, lightPeriod),
-        offsetof(nvs_data_t, lightSwitch1), offsetof(nvs_data_t, lightSwitch2),
-        offsetof(nvs_data_t, lightSwitch3)};
-
-    char buffer[200];
-    memset(buffer, 0, sizeof(buffer));
-    if (data_packet_len > 198) {
-        ESP_LOGW(TAG, "Data packet too long");
+void parse_data_packet(const char *data_packet, int data_packet_len, nvs_data_t *nvs_data) {
+    // 将数据包解析为 cJSON 对象
+    cJSON *json = cJSON_Parse(data_packet);
+    if (json == NULL) {
+        ESP_LOGW(TAG, "Error parsing JSON data");
         return;
     }
-    strncpy(buffer, data_packet, data_packet_len);
-    int len = data_packet_len;
-    if (buffer[len - 1] == '\n') {
-        buffer[len - 1] = '\0';
-        len--;
-    }
-    if (buffer[len - 1] == '\r') {
-        buffer[len - 1] = '\0';
-        len--;
-    }
-    // if (buffer[len - 1] != ',') {
-    //     buffer[len] = ',';
-    //     len++;
-    // }
-    ESP_LOGI(TAG, "Data packet: %s  len:%d", buffer, len);
 
-    char *key, *value, *token = strtok(buffer, ",");
-    char storage_buffer[NVS_STORAGE_MAX + 10];
-
-    while (token != NULL) {
-        key = token;
-        value = strchr(token, ':');
-        if (value && *value == ':') {
-            *value = '\0'; // End key string
-            value++;       // Start of value string
-
-            // Check if the value is for a light setting and validate it
-            if (strcmp(key, NVS_Reboot) == 0) {
-                if (strcmp(value, "1") == 0) {
-                    ESP_LOGI(TAG, "Rebooting...");
-                    esp_restart();
-                }
-            }
-            int num;
-            for (int i = 0; i < NVS_StringNum; i++) {
-                if (strcmp(key, LABELS[i]) == 0) {
-                    if (strlen(value) > NVS_STORAGE_MAX) {
-                        ESP_LOGW(TAG, "Value too long for %s", key);
-                        return;
-                    } else {
-                        strncpy((char *)nvs_data + offsets[i], value,
-                                NVS_STORAGE_MAX);
-                        ESP_LOGI(TAG, "Key: %s, Value: %s", key, value);
-                        sprintf(storage_buffer, "%s:%s", key, value);
-                        nvs_write_data_to_flash(storage_buffer);
-                    }
-                }
-            }
-            for (int i = NVS_StringNum; i < NVS_StringNum + NVS_IntNum; i++) {
-                if (strcmp(key, LABELS[i]) == 0) {
-                    if (sscanf(value, "%d", &num) == 1 && num >= 0 &&
-                        num <= 65535) {
-                        strncpy((char *)nvs_data + offsets[i], value,
-                                NVS_STORAGE_MAX);
-                        ESP_LOGI(TAG, "Key: %s, Value: %s", key, value);
-                        sprintf(storage_buffer, "%s:%s", key, value);
-                        nvs_write_data_to_flash(storage_buffer);
-                    }
-                }
+    // 遍历所有标签并处理相应数据
+    for (int i = 0; i < NVS_StringNum + NVS_IntNum; i++) {
+        cJSON *item = cJSON_GetObjectItem(json, LABELS[i]);
+        if (item != NULL && cJSON_IsString(item)) {
+            const char *value = item->valuestring;
+            if (strlen(value) > NVS_STORAGE_MAX) {
+                ESP_LOGW(TAG, "Value too long for %s", LABELS[i]);
+                cJSON_Delete(json);
+                return;
+            } else {
+                strncpy((char *)nvs_data + offsetof(nvs_data_t, ssid) + i * NVS_STORAGE_MAX, value, NVS_STORAGE_MAX);
+                ESP_LOGI(TAG, "Key: %s, Value: %s", LABELS[i], value);
+                char storage_buffer[NVS_STORAGE_MAX + 10];
+                sprintf(storage_buffer, "%s:%s", LABELS[i], value);
+                nvs_write_data_to_flash(storage_buffer);
             }
         }
-        token = strtok(NULL, ",");
     }
+
+    // 处理重启指令
+    cJSON *reboot_item = cJSON_GetObjectItem(json, NVS_Reboot);
+    if (reboot_item != NULL && cJSON_IsString(reboot_item) && strcmp(reboot_item->valuestring, "1") == 0) {
+        ESP_LOGI(TAG, "Rebooting...");
+        esp_restart();
+    }
+
+    // 释放 cJSON 对象
+    cJSON_Delete(json);
 }

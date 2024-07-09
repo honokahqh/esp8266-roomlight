@@ -16,7 +16,6 @@
 #include "esp_log.h"
 #include "esp_netif.h"
 #include "esp_event.h"
-// #include "protocol_examples_common.h"
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "esp_ota_ops.h"
@@ -24,8 +23,8 @@
 #include "esp_https_ota.h"
 
 static const char *TAG = "simple_ota_example";
-extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
-extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
+extern const uint8_t cert_pem_start[] asm("_binary_cert_pem_start");
+extern const uint8_t cert_pem_end[] asm("_binary_cert_pem_end");
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
@@ -60,8 +59,9 @@ void simple_ota_example_task(void * pvParameter)
     ESP_LOGI(TAG, "Starting OTA example...");
 
     esp_http_client_config_t config = {
-        .url = "http://192.168.0.124:8000/ota.bin",
+        .url = "httpS://192.168.0.128:8000/ota.bin",
         .event_handler = _http_event_handler,
+        .cert_pem = (char *)cert_pem_start,
     };
     esp_err_t ret = esp_https_ota(&config);
     if (ret == ESP_OK) {

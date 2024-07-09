@@ -27,6 +27,7 @@ static void tcp_server_task(void *pvParameters);
 static void wifi_event_handler(void *arg, esp_event_base_t event_base,
                                int32_t event_id, void *event_data) {
     if (event_id == WIFI_EVENT_AP_STACONNECTED) {
+        user_softap_state.newDeviceConnect = true;
         wifi_event_ap_staconnected_t *event =
             (wifi_event_ap_staconnected_t *)event_data;
         ESP_LOGI(TAG, "station " MACSTR " join, AID=%d", MAC2STR(event->mac),
@@ -54,7 +55,7 @@ void wifi_init_softap() {
     sprintf(user_ssid, "%s-%04x", EXAMPLE_ESP_WIFI_SSID, uniqueId);
     wifi_config_t wifi_config = {
         .ap = {
-               .ssid_len = strlen(EXAMPLE_ESP_WIFI_SSID),
+               .ssid_len = strlen(user_ssid),
                .password = EXAMPLE_ESP_WIFI_PASS,
                .max_connection = EXAMPLE_MAX_STA_CONN,
                .authmode = WIFI_AUTH_WPA_WPA2_PSK},
@@ -122,8 +123,8 @@ void tcp_server_task(void *pvParameters) {
                 break;
             }
             ESP_LOGI(TAG, "Socket accepted");
-
-            while (1) {
+            user_softap_state.newDeviceBindTCP = true;
+            while (1) {     
                 int len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
                 if (len < 0) {
                     ESP_LOGE(TAG, "recv failed: errno %d", errno);

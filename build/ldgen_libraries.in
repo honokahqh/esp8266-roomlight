@@ -36,9 +36,10 @@ $<TARGET_FILE:__idf_spi_ram>
 $<TARGET_FILE:__idf_spiffs>
 $<TARGET_FILE:__idf_main>
 $<TARGET_FILE:__idf_user_nvs>
-$<TARGET_FILE:__idf_user_gpio>
 $<TARGET_FILE:__idf_user_mqtt>
+$<TARGET_FILE:__idf_user_gpio>
 $<TARGET_FILE:__idf_user_ota>
 $<TARGET_FILE:__idf_user_pwm>
 $<TARGET_FILE:__idf_user_softap>
+$<TARGET_FILE:__idf_user_test>
 $<TARGET_FILE:__idf_user_wifi>

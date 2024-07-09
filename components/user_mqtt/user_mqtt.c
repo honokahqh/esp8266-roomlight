@@ -14,12 +14,12 @@
 #include <string.h>
 static const char *TAG = "MQTTS_EXAMPLE";
 
-static const char *name = "honoka";
+esp_mqtt_client_handle_t client;
+static const char *name = "roomlight";
 static const char *device_secret = "152634";
 static const char *mqtt_server_domain = "mqtts://mqtt-saas.soe.xin";
-static const char *client_ID = "Honokahqh";
-static const char *topic_1 = "honokahqh";
-
+static const char *client_ID = "roomlight";
+user_mqttState_t user_mqttState;
 #if CONFIG_BROKER_CERTIFICATE_OVERRIDDEN == 1
 static const uint8_t mqtt_eclipse_org_pem_start[] =
     "-----BEGIN CERTIFICATE-----\n" CONFIG_BROKER_CERTIFICATE_OVERRIDE
@@ -39,10 +39,15 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event) {
     case MQTT_EVENT_CONNECTED:
         dev_state = DEV_MQTT_CONNECTED;
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        msg_id = esp_mqtt_client_subscribe(client, topic_1, 0);
+        msg_id = esp_mqtt_client_subscribe(client, MQTT_SubscribeTopic, 0);
         ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+        char data[80];
+        sprintf(data, "userID:%s,roomID:%s", nvs_data.userID,
+                nvs_data.roomID);
+        publish_roomlight_update(MQTT_UpdateTopic, data);
         break;
     case MQTT_EVENT_DISCONNECTED:
+        dev_state = DEV_MQTT_CONNECTING;
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
         break;
     case MQTT_EVENT_SUBSCRIBED:
@@ -61,6 +66,7 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event) {
         parse_data_packet(event->data, event->data_len, &nvs_data);
         break;
     case MQTT_EVENT_ERROR:
+        dev_state = DEV_MQTT_CONNECTING;
         ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
         if (event->error_handle->error_type == MQTT_ERROR_TYPE_ESP_TLS) {
             ESP_LOGI(TAG, "Last error code reported from esp-tls: 0x%x",
@@ -119,8 +125,23 @@ void mqtt_app_start(void) {
     };
 
     ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
-    esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
+    client = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler,
                                    client);
     esp_mqtt_client_start(client);
+}
+
+
+void publish_roomlight_update(const char *topic , const char *data) {
+    if (client == NULL) {
+        ESP_LOGE(TAG, "MQTT client is not initialized");
+        return;
+    }
+
+    int msg_id = esp_mqtt_client_publish(client, topic, data, 0, 1, 0);
+    if (msg_id == -1) {
+        ESP_LOGE(TAG, "Failed to publish message");
+    } else {
+        ESP_LOGI(TAG, "Published message, msg_id=%d", msg_id);
+    }
 }

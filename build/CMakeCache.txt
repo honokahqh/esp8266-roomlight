@@ -281,6 +281,9 @@ __idf_app_update_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;
 __idf_bootloader_support_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_esp8266;
 
 //Dependencies for the target
+__idf_cJSON_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_esp8266;
+
+//Dependencies for the target
 __idf_console_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_esp8266;
 
 //Dependencies for the target
@@ -393,6 +396,9 @@ __idf_user_pwm_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;ge
 
 //Dependencies for the target
 __idf_user_softap_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_esp8266;
+
+//Dependencies for the target
+__idf_user_test_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_esp8266;
 
 //Dependencies for the target
 __idf_user_wifi_LIB_DEPENDS:STATIC=general;__idf_newlib;general;__idf_freertos;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_esp8266;
@@ -541,7 +547,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=58
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=59
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

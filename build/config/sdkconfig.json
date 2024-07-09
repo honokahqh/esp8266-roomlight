@@ -374,7 +374,7 @@
     "OPENSSL_ASSERT_DO_NOTHING": true,
     "OPENSSL_ASSERT_EXIT": false,
     "OPENSSL_DEBUG": false,
-    "OTA_ALLOW_HTTP": true,
+    "OTA_ALLOW_HTTP": false,
     "OTA_BUF_SIZE": 256,
     "PARTITION_TABLE_CUSTOM": false,
     "PARTITION_TABLE_CUSTOM_FILENAME": "partitions.csv",

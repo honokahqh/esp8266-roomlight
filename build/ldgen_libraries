@@ -36,9 +36,10 @@ D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/spi_r
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/spiffs/libspiffs.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/main/libmain.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_nvs/libuser_nvs.a
-D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_gpio/libuser_gpio.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_mqtt/libuser_mqtt.a
+D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_gpio/libuser_gpio.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_ota/libuser_ota.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_pwm/libuser_pwm.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_softap/libuser_softap.a
+D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_test/libuser_test.a
 D:/workspace/esp8266/ESP8266_RTOS_SDK/examples/honoka/softAP/build/esp-idf/user_wifi/libuser_wifi.a

@@ -67,7 +67,7 @@ esp_err_t set_rgb_color(uint16_t lightness) {
     uint32_t g = gamma_corrected_values[((lightness >> 5) & 0x3f) / 2];
     uint32_t b = gamma_corrected_values[lightness & 0x1f];
     // ESP_LOGI(TAG, "Setting RGB color to %d %d %d", r, g, b);
-    pwm_stop(0);
+    // pwm_stop(0);
     pwm_set_duty(0, r);
     pwm_set_duty(1, b);
     pwm_set_duty(2, g);

@@ -5,9 +5,8 @@
 typedef struct 
 {
     /* data */
-    bool isEnable;
-    bool isBind;
-    int timeoutCount;
+    bool newDeviceConnect;
+    bool newDeviceBindTCP;
 }user_softap_state_t;
 extern user_softap_state_t user_softap_state;
 

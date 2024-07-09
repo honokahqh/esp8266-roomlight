@@ -3,13 +3,14 @@
 
 #include "nvs_flash.h"
 
-#define NVS_STORAGE_MAX 20
+#define NVS_STORAGE_MAX 30
 
 #define NVS_SSID "ssid"
 #define NVS_PASS "pass"
 #define NVS_USERID "user"
 #define NVS_ROOMID "room"
-#define NVS_StringNum   4
+#define NVS_TimeStamp "timestamp" // 基于第一次连接wifi获取到的时间戳作为延长sn码
+#define NVS_StringNum   5
 #define NVS_LightNormal "lightNormal" //常亮颜色
 #define NVS_LightPeriod     "lightPeriod" // 切换周期和切换颜色
 #define NVS_LightSwitch1    "lightSwitch1"
@@ -33,6 +34,7 @@ typedef struct
     char pass[NVS_STORAGE_MAX];
     char userID[NVS_STORAGE_MAX];
     char roomID[NVS_STORAGE_MAX];
+    char timeStamp[NVS_STORAGE_MAX];
     char lightNormal[NVS_STORAGE_MAX];
     char lightPeriod[NVS_STORAGE_MAX];
     char lightSwitch1[NVS_STORAGE_MAX];

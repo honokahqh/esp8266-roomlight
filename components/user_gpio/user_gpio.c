@@ -4,6 +4,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "user_nvs.h"
+#include "user_mqtt.h"
 
 #define GPIO_INPUT_IO_16 16
 #define GPIO_INPUT_PIN_SEL (1ULL << GPIO_INPUT_IO_16)
@@ -17,6 +18,8 @@ void gpio_task(void *arg) {
     while (1) {
         if (gpio_get_level(GPIO_INPUT_IO_16)) {
             count++;
+            if(count == 1)
+                publish_roomlight_update(MQTT_UpdateTopic, "keydown");
             if (count > 20) {
                 parse_data_packet(factory_reset, strlen(factory_reset),
                                   &nvs_data);
